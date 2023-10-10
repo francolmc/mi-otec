@@ -23,6 +23,6 @@ jobs:
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
-        server: ftp.nsideas.cl
+        server: 209.222.98.241 # ftp.nsideas.cl
         username: mi-otec@nsideas.cl
         password: ${{ secrets.FTP_ACCOUNT }}
