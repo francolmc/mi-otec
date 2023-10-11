@@ -2,7 +2,7 @@
   "name": "mi-otec",
   "private": true,
   "sideEffects": false,
-  "type": "commonjs",
+  "type": "module",
   "scripts": {
     "build": "remix build",
     "dev": "remix dev --manual",
