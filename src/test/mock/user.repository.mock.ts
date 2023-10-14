@@ -1,5 +1,5 @@
-import { User } from "@core/domain/user";
-import { UserRepository } from "@core/domain/user-repository";
+import { User } from "@core/domain/user/user";
+import { UserRepository } from "@core/infraestructure/user/user.repository";
 
 export const mockUserRepository: UserRepository = {
     findById: async (id: number) => {
@@ -21,7 +21,7 @@ export const mockUserRepository: UserRepository = {
                 email: "prueba@prueba.com",
                 firstName: "pueba",
                 lastName: "prueba",
-                password: "password123"
+                password: "password12310"
             }
         }
         return null;
