@@ -26,3 +26,9 @@ jobs:
         server: 209.222.98.241 # ftp.nsideas.cl
         username: mi-otec@nsideas.cl
         password: ${{ secrets.FTP_ACCOUNT }}
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
+          README.md
+          .gitignore
