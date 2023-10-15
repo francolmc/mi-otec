@@ -35,6 +35,5 @@ jobs:
         exclude: |
           **/.git*
           **/.git*/**
-          **/node_modules/**
           README.md
           .gitignore
