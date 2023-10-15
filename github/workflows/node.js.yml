@@ -1,6 +1,12 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-on: push
+on:
+  pull_request:
+    # Sequence of patterns matched against refs/heads
+    branches:    
+      - main
+      # - 'mona/octocat'
+      # - 'releases/**'
 name: 🚀 Deploy website on push
 jobs:
   web-deploy:
