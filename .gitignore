@@ -34,6 +34,4 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-prisma/dev.db
-
-/.env
+.env
