@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { RemoveUserUseCase } from "..";
 import { User, UserService } from "../../../core/user";
-import { userRepositoryMock } from "../../../mock/user-repository.mock";
 
 const userData: User = {
     firstName: "Prueba",

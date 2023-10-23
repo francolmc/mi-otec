@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 
-const saltRound = 10;
+const saltRound = process.env.SALT_ROUND as string || 10;
 
 export const hashPassword = async (password: string): Promise<string> => {
     return bcrypt.hash(password, saltRound);

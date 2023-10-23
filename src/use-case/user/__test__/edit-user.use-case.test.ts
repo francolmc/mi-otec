@@ -1,7 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { EditUserUseCase } from "..";
 import { User, UserService } from "../../../core/user";
-import { userRepositoryMock } from "../../../mock/user-repository.mock";
 
 vi.mock("bcrypt", () => {
     return {
