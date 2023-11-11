@@ -1,2 +1,6 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<header class="bg-gray-200 py-8">
+    <div class="container mx-auto text-center">
+        <h1 class="text-4xl font-semibold text-gray-800">Bienvenido a Mi OTEC</h1>
+        <p class="text-lg text-gray-600">Gestiona empresas, cursos y capacitaciones fácilmente.</p>
+    </div>
+</header>
