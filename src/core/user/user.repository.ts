@@ -1,7 +1,8 @@
-import BaseRepository from "../base/base.repository";
-import User from "./user";
+import type UserModel from "./user.model";
 
-export default interface UserRepository extends BaseRepository<User> {
-  findByEmail(email: string): Promise<User | null>;
-  getAll(): Promise<User[]>;
+export default interface UserRepository {
+    createUser(user: UserModel): Promise<UserModel>;
+    updateUser(id: number, user: UserModel): Promise<UserModel | null>;
+    findUserById(id: number): Promise<UserModel | null>;
+    findUserByEmail(email: string): Promise<UserModel | null>;
 }
