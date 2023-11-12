@@ -1,5 +1,5 @@
 import { DataSource } from "typeorm";
-import { User } from "../infraestructure/adapters/entities";
+import { Company, User } from "../infraestructure/adapters/entities";
 import { DATABASE_HOST, DATABASE_PORT, DATABASE_NAME, DATABASE_USER, DATABASE_PASSWORD } from "$env/static/private";
 
 export default class TypeOrm {
@@ -15,7 +15,7 @@ export default class TypeOrm {
                 password: DATABASE_PASSWORD,
                 database: DATABASE_NAME,
                 synchronize: true,
-                entities: [User],
+                entities: [User, Company],
                 logging: true,
             }).initialize()
                 .then((fulfilled) => {
