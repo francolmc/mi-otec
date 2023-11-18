@@ -6,11 +6,21 @@ import CompanyTypeOrmRepository from "../../infraestructure/adapters/company.typ
 const companyRepository: CompanyRepository = new CompanyTypeOrmRepository();
 const showCompanies = new ShowCompaniesUseCase(companyRepository);
 
-export const load: PageServerLoad = async () => {
-    const companies = await showCompanies.execute("");
+export const load: PageServerLoad = async ({ url }) => {
+    const perPage = 1;
+    const currentPage = Number(url.searchParams.get("page")) || 1;
+    const search = url.searchParams.get("search") || ""
+
+    const result = await showCompanies.execute(search, currentPage, perPage);
 
     return {
-        props: { companies },
+        props: { 
+            companies: result.companies,
+            totalCount: result.count,
+            search, 
+            currentPage, 
+            perPage 
+        },
         hydrate: false
     }
 }
