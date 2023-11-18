@@ -23,15 +23,18 @@ export default class CompanyTypeOrmRepository implements CompanyRepository {
         return this.toModel(result);
     }
     
-    public async showCompanies(name?: string | undefined): Promise<CompanyModel[]> {
+    public async showCompanies(name?: string, page?: number, perPage?: number): Promise<{ companies: CompanyModel[], count: number }> {
         const db = await TypeOrm.getDb();
-        const result = await db?.manager.findBy(Company, { name: Like(`${name}%`) });
+        const skip = page && perPage ? (page - 1) * perPage : 0;
+        const result = await db?.manager.findAndCount(Company, { where: { name: Like(`${name}%`) }, skip, take: perPage });
 
-        if (!result) return [];
+        if (!result) return { companies: [], count: 0 };
 
-        return result?.map((item) => {
-            return this.toModel(item) as CompanyModel;
-        });
+        return { 
+            companies: result[0]?.map((item) => {
+                return this.toModel(item) as CompanyModel;
+            }), 
+            count: result[1]};
     }
     
     public async createCompany(company: CompanyModel): Promise<CompanyModel> {
