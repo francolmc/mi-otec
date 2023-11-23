@@ -38,6 +38,9 @@
             {#if form?.invalid}
                 <p class="error">Los campos no son validos.</p>
             {/if}
+            {#if form?.error}
+                <p class="error">{ form?.message }</p>
+            {/if}
         </div>
     </form>
 </div>

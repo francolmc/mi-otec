@@ -1,4 +1,6 @@
 <script>
+	import { error } from "@sveltejs/kit";
+
     export let form;
 </script>
 
@@ -36,6 +38,9 @@
         <div class="mb-4">
             {#if form?.invalid}
                 <p class="error">Los campos no son validos.</p>
+            {/if}
+            {#if form?.error}
+                <p class="error">{ form?.message }</p>
             {/if}
         </div>
     </form>

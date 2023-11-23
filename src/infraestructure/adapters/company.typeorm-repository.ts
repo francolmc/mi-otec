@@ -5,68 +5,13 @@ import type CompanyRepository from "../../core/company/company.repository";
 import { Company } from "./entities";
 
 export default class CompanyTypeOrmRepository implements CompanyRepository {
-    public async findCompanyById(id: number): Promise<CompanyModel | null> {
+    private async getDb() {
         const db = await TypeOrm.getDb();
-        const result = await db?.manager.findOneBy(Company, { id });
-
-        if (!result) return null;
-
-        return this.toModel(result);
+        if (!db) throw new Error("Database not available.");
+        return db;
     }
 
-    public async findCompanyByRut(rut: number): Promise<CompanyModel | null> {
-        const db = await TypeOrm.getDb();
-        const result = await db?.manager.findOneBy(Company, { rut });
-
-        if (!result) return null;
-
-        return this.toModel(result);
-    }
-    
-    public async showCompanies(name?: string, page?: number, perPage?: number): Promise<{ companies: CompanyModel[], count: number }> {
-        const db = await TypeOrm.getDb();
-        const skip = page && perPage ? (page - 1) * perPage : 0;
-        const result = await db?.manager.findAndCount(Company, { where: { name: Like(`${name}%`) }, skip, take: perPage });
-
-        if (!result) return { companies: [], count: 0 };
-
-        return { 
-            companies: result[0]?.map((item) => {
-                return this.toModel(item) as CompanyModel;
-            }), 
-            count: result[1]};
-    }
-    
-    public async createCompany(company: CompanyModel): Promise<CompanyModel> {
-        const db = await TypeOrm.getDb();
-        const companyForCreate = new Company();
-        companyForCreate.rut = company.rut;
-        companyForCreate.name = company.name;
-        companyForCreate.address = company.address;
-        companyForCreate.email = company.email;
-
-        const result = await db?.manager.save(companyForCreate);
-
-        return this.toModel(result) as CompanyModel;
-    }
-    
-    public async updateCompany(id: number, company: CompanyModel): Promise<CompanyModel | null> {
-        const db = await TypeOrm.getDb();
-        const companyForUpdate = await db?.manager.findOneBy(Company, { id });
-
-        if (!companyForUpdate) return null;
-
-        companyForUpdate.rut = company.rut;
-        companyForUpdate.name = company.name;
-        companyForUpdate.address = company.address;
-        companyForUpdate.email = company.email;
-
-        const result = await db?.manager.save(companyForUpdate);
-
-        return this.toModel(result);
-    }
- 
-    private toModel(company: Company | undefined | null): CompanyModel | null {
+    private toModel(company: Company | null | undefined): CompanyModel | null {
         if (!company) return null;
 
         return {
@@ -78,5 +23,55 @@ export default class CompanyTypeOrmRepository implements CompanyRepository {
             createdAt: company.createdAt,
             updatedAt: company.updatedAt
         };
+    }
+
+    public async findCompanyById(id: number): Promise<CompanyModel | null> {
+        const db = await this.getDb();
+        const result = await db.manager.findOneBy(Company, { id });
+        return this.toModel(result);
+    }
+
+    public async findCompanyByRut(rut: number): Promise<CompanyModel | null> {
+        const db = await this.getDb();
+        const result = await db.manager.findOneBy(Company, { rut });
+        return this.toModel(result);
+    }
+
+    public async showCompanies(name?: string, page?: number, perPage?: number): Promise<{ companies: CompanyModel[], count: number }> {
+        const db = await this.getDb();
+        const skip = page && perPage ? (page - 1) * perPage : 0;
+        const result = await db.manager.findAndCount(Company, { where: { name: Like(`${name}%`) }, skip, take: perPage });
+    
+        if (!result) return { companies: [], count: 0 };
+
+        return { 
+            companies: result[0]?.map((item) => {
+                return this.toModel(item) as CompanyModel;
+            }), 
+            count: result[1]
+        };
+    }    
+
+    public async createCompany(company: CompanyModel): Promise<CompanyModel> {
+        const db = await this.getDb();
+        const companyForCreate = new Company();
+        Object.assign(companyForCreate, company);
+
+        const result = await db.manager.save(companyForCreate);
+
+        return this.toModel(result) as CompanyModel;
+    }
+
+    public async updateCompany(id: number, updatedCompany: CompanyModel): Promise<CompanyModel | null> {
+        const db = await this.getDb();
+        const companyForUpdate = await db.manager.findOneBy(Company, { id });
+
+        if (!companyForUpdate) return null;
+
+        Object.assign(companyForUpdate, updatedCompany);
+
+        const result = await db.manager.save(companyForUpdate);
+
+        return this.toModel(result);
     }
 }

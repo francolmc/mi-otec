@@ -44,11 +44,19 @@ export const actions: Actions = {
         }
         
         const updatecompany = new UpdateCompanyUseCase(companyRepository);
-        await updatecompany.execute(+(params.id || '0'), {
-            name,
-            address,
-            email
-        });
+
+        try {
+            await updatecompany.execute(+(params.id || '0'), {
+                name,
+                address,
+                email
+            });
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                return fail(400, { error: true, message: err.message })
+            }
+            return fail(400, { error: true, message: "Error en el proceso." })
+        }
 
         throw redirect(302, "/companies");
     }

@@ -3,13 +3,10 @@
     export let data;
 
     let search = data.props.search;
-    $: companies = data.props.companies;
-    $: pageSize = data.props.perPage;
-    $: totalItems = data.props.totalCount;
-    $: totalPages = Math.ceil(totalItems / pageSize);
-    $: currentPage = data.props.currentPage;
+    let { companies, perPage, totalCount, currentPage } = data.props;
+    let totalPages = Math.ceil(totalCount / perPage);
 
-    const handleKeydown = (event: { key: string; }) => {
+    const handleKeydown = (event: { key: string }) => {
         if (event.key === "Enter") {
             const query = search ? `?search=${search}` : "?search=";
             goto(query);
@@ -54,7 +51,7 @@
         <nav>
             {#each Array(totalPages) as _, index}
                 <a 
-                    href="/companies?seaarch={search}&page={index + 1}"
+                    href={`/companies?search=${search}&page=${index + 1}`}
                     class="{currentPage === index + 1 ? 'text-gray-800' : 'text-blue-600'}"
                 >
                     {index + 1}

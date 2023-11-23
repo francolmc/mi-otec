@@ -1,5 +1,5 @@
 import PasswordHash from "$lib/password-hash";
-import type UserModel from "./user.model";
+import type { UserModel } from "./user.model";
 import type UserRepository from "./user.repository";
 
 export interface CreateUserInputFields {

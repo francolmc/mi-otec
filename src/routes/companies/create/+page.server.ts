@@ -28,8 +28,16 @@ export const actions: Actions = {
         const createCompany = new CreateCompanyUseCase(companyRepository);
 
         const rutNumber = rut.split("-");
-        await createCompany.execute({ rut: +rutNumber[0], name, address, email });
-
+        try {
+            await createCompany.execute({ rut: +rutNumber[0], name, address, email });
+        }
+        catch (err: unknown) {
+            if (err instanceof Error) {
+                return fail(400, { error: true, message: err.message });
+            }
+            return fail(400, { error: true, message: "Error en el proceso." })
+        }
+        
         throw redirect(302, "/companies");
     },
 };

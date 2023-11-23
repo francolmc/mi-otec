@@ -1,10 +1,10 @@
 import TypeOrm from "$lib/db.server";
-import type UserModel from "../../core/user/user.model";
+import type { CreateUserModel, UpdateUserModel, UserModel } from "../../core/user/user.model";
 import type UserRepository from "../../core/user/user.repository";
 import { User } from "./entities";
 
 export default class UserTypeOrmRepository implements UserRepository {
-    public async createUser(user: UserModel): Promise<UserModel> {
+    public async createUser(user: CreateUserModel): Promise<UserModel> {
         const db = await TypeOrm.getDb();
         const userForCreate = new User();
         userForCreate.firstName = user.firstName,
@@ -16,7 +16,7 @@ export default class UserTypeOrmRepository implements UserRepository {
         return this.toModel(result) as UserModel;
     }
 
-    public async updateUser(id: number, user: UserModel): Promise<UserModel | null> {
+    public async updateUser(id: number, user: UpdateUserModel): Promise<UserModel | null> {
         const db = await TypeOrm.getDb();
         const userForUpdate = await db?.manager.findOneBy(User, { id });
 
@@ -52,13 +52,13 @@ export default class UserTypeOrmRepository implements UserRepository {
     private toModel(user: User | undefined | null): UserModel | null {
         if (!user) return null;
         return {
-            id: user.id,
+            id: user.id || 0,
             firstName: user.firstName as string,
             lastName: user.lastName as string,
             email: user.email as string,
-            password: user.password,
-            createdAt: user.createdAt,
-            updatedAt: user.updatedAt
+            password: user.password || "",
+            createdAt: user.createdAt || new Date(),
+            updatedAt: user.updatedAt || new Date()
         };
     }
 }

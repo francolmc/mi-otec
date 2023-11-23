@@ -9,18 +9,26 @@ const showCompanies = new ShowCompaniesUseCase(companyRepository);
 export const load: PageServerLoad = async ({ url }) => {
     const perPage = 1;
     const currentPage = Number(url.searchParams.get("page")) || 1;
-    const search = url.searchParams.get("search") || ""
+    const search = url.searchParams.get("search") || "";
 
-    const result = await showCompanies.execute(search, currentPage, perPage);
+    try {
+        const result = await showCompanies.execute(search, currentPage, perPage);
 
-    return {
-        props: { 
-            companies: result.companies,
-            totalCount: result.count,
-            search, 
-            currentPage, 
-            perPage 
-        },
-        hydrate: false
+        return {
+            props: { 
+                companies: result.companies,
+                totalCount: result.count,
+                search, 
+                currentPage, 
+                perPage 
+            },
+            hydrate: false
+        };
+    } catch (error) {
+        console.error("Error fetching companies:", error);
+        return {
+            status: 500,
+            error: new Error("Internal Server Error")
+        };
     }
-}
+};

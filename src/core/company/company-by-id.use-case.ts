@@ -7,7 +7,7 @@ export default class CompanyByIdUseCase {
     public async execute (id: number): Promise<CompanyModel | null> {
         const company = await this._companyRepository.findCompanyById(id);
 
-        if (!company) throw new Error("The company not exist.");
+        if (!company) return null;
         
         return company;
     }

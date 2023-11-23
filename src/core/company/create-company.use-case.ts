@@ -9,18 +9,25 @@ export interface CreateCompanyInputFields {
 }
 
 export default class CreateCompanyUseCase {
-    constructor (private readonly _companyRepository: CompanyRepository) {}
+    constructor(private readonly _companyRepository: CompanyRepository) {}
 
-    public async execute ({ rut, name, address, email }: CreateCompanyInputFields): Promise<CompanyModel> {
-        const company = await this._companyRepository.findCompanyByRut(rut);
+    public async execute({
+        rut,
+        name,
+        address,
+        email,
+    }: CreateCompanyInputFields): Promise<CompanyModel> {
+        const existingCompany = await this._companyRepository.findCompanyByRut(rut);
 
-        if (company) throw new Error("The company already exist.");
-        
+        if (existingCompany) {
+            throw new Error("The company already exists.");
+        }
+
         return this._companyRepository.createCompany({
             rut,
             name,
             address,
-            email
+            email,
         });
     }
 }
